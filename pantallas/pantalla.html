@@ -124,8 +124,8 @@
         <th>Fecha de Contratación</th>
       </tr>
     </thead>
-    <tbody id="userTableBody">
-      <!-- Los datos de los usuarios se insertarán aquí dinámicamente -->
+    <tbody id="TableBody">
+
     </tbody>
   </table>
 
@@ -141,7 +141,7 @@
       fetch('/users')
         .then(response => response.json())
         .then(users => {
-          const tableBody = document.getElementById('userTableBody');
+          const tableBody = document.getElementById('TableBody');
           users.forEach(user => {
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -161,7 +161,7 @@
     // Funcionalidad de búsqueda
     document.getElementById('searchButton').addEventListener('click', function() {
       const searchValue = document.getElementById('searchInput').value.toLowerCase();
-      const rows = document.querySelectorAll('#userTableBody tr');
+      const rows = document.querySelectorAll('#TableBody tr');
 
       rows.forEach(row => {
         const cells = row.querySelectorAll('td');
