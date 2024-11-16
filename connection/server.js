@@ -1,10 +1,12 @@
 const express = require('express');
 const mysql = require('mysql2');
+const path = require('path');
 const app = express();
 const port = 3000;
 
 app.use(express.static('public'));
-app.use(express.json());  // Para manejar solicitudes JSON
+app.use(express.json());  
+app.use(express.urlencoded({ extended: true })); 
 
 const connection = mysql.createConnection({
     host: '127.0.0.1',
@@ -22,7 +24,6 @@ connection.connect(err => {
     console.log('Connected to the database!');
 });
 
-// Ruta para obtener todos los usuarios
 app.get('/users', (req, res) => {
     const query = 'SELECT id, username, telefono, puesto, fechadecontratacion FROM aws.users';
     
@@ -32,6 +33,21 @@ app.get('/users', (req, res) => {
             return;
         }
         res.json(result);
+    });
+});
+
+app.post('/addUser', (req, res) => {
+    const { usuario, telefono, posicion, fechaContratacion } = req.body;
+    const query = 'INSERT INTO aws.users (username, telefono, puesto, fechadecontratacion) VALUES (?, ?, ?, ?)';
+
+    connection.query(query, [usuario, telefono, posicion, fechaContratacion], (err, result) => {
+        if (err) {
+            console.error('Error inserting data: ' + err.message);
+            res.status(500).send('Error inserting data');
+            return;
+        }
+        console.log('User added successfully:', result);
+        res.redirect('/pantalla.html'); 
     });
 });
 

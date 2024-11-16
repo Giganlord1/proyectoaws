@@ -7,8 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: 
-            #000000;
+            background-color: #000000;
             padding: 20px;
             margin: 0;
             display: flex;
@@ -44,8 +43,8 @@
 <body>
 
 <div class="form-container">
-    <h2>Nuevo Regitro</h2>
-    <form>
+    <h2>Nuevo Registro</h2>
+    <form action="/addUser" method="POST">
         <label for="usuario">Usuario:</label>
         <input type="text" id="usuario" name="usuario" required>
 
@@ -60,6 +59,8 @@
 
         <input type="submit" value="Enviar">
     </form>
+    
+      </script>
 </div>
 
 </body>

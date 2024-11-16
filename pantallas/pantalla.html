@@ -154,6 +154,7 @@
           });
         })
         .catch(error => {
+          alert('Error al cargar los usuarios:', error);
           console.error('Error al cargar los usuarios:', error);
         });
     };
@@ -177,7 +178,7 @@
 
     // Redirigir a la pantalla de agregar usuario
     document.getElementById('saveButton').addEventListener('click', function() {
-      window.location.href = 'pantallas/nuevor.html';
+      window.location.href = 'nuevor.html';
     });
 
     // Eliminar usuario seleccionado
