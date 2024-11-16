@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantalla</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7f6;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    }
+
+    /* Estilo del encabezado */
+    h1, h2 {
+      color: #333;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+
+    /* Barra de búsqueda */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .search-bar input {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      width: 250px;
+    }
+
+    .search-bar button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .search-bar button:hover {
+      background-color: #45a049;
+    }
+
+    /* Estilo de la tabla */
+    table {
+      width: 80%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    table th, table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+    }
+
+    table tr:hover {
+      background-color: #f5f5f5;
+    }
+
+    table td {
+      text-align: center;
+    }
+  
+  button {
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #e53935;
+  }
+</style>
+</head>
+<body>
+  <h1>Data base</h1>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Buscar usuario...">
+    <button id="searchButton">Buscar</button>
+  </div>
+
+
+  <h2>Lista de Usuarios</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Puesto</th>
+        <th>Fecha de Contratación</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+         <?php
+                    
+      include("connection/gente.php");
+      $registro = get_All();
+      if (count($registro)>0){
+          foreach($registro as $row){
+              echo "<tr>". "<td> ". $row->username. "</td>" . 
+              "<td> " . $row->password . "</td>" .
+              "<td> " . $row->telefono . "</td>".
+              "<td> " . $row->puesto . "</td>".
+              "<td> " . $row->fechaContratacion . "</td>".
+              "</tr>";
+          }
+
+      }
+      ?>
+    </tbody>
+  </table>
+
+  <!-- Botones de Guardar y Borrar -->
+  <div class="buttons">
+    <button id="saveButton">Añadir Usuario</button>
+    <button id="deleteButton">Borrar Usuario</button>
+  </div>
+  <script>
+    // Redirigir a la pantalla de agregar usuario
+    document.getElementById('saveButton').addEventListener('click', function() {
+      window.location.href = 'pantallas\\nuevor.html';
+    });
+
+    // Eliminar usuario seleccionado
+    document.getElementById('deleteButton').addEventListener('click', function() {
+      const selectedUser = document.querySelector('input[name="userSelect"]:checked');
+      if (!selectedUser) {
+        alert('Por favor, selecciona un usuario para borrar.');
+        return;
+      }
+
+      const confirmation = confirm('¿Estás seguro de que deseas borrar este usuario?');
+      if (confirmation) {
+        const userId = selectedUser.value;
+
+        fetch(`/deleteUser`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: userId })
+        })
+        .then(response => {
+          if (response.ok) {
+            alert('Usuario borrado exitosamente.');
+            const row = selectedUser.closest('tr');
+            row.remove();
+          } else {
+            alert('Error al borrar el usuario.');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      }
+    });
+
+    // Buscar usuarios
+    document.getElementById('searchButton').addEventListener('click', function() {
+      const searchValue = document.getElementById('searchInput').value.toLowerCase();
+      const rows = document.querySelectorAll('#userList tr');
+
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const name = cells[1].textContent.toLowerCase();
+
+        if (name.includes(searchValue)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  </script>
+  
+</body>
+</html>
