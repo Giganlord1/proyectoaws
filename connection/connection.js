@@ -20,3 +20,13 @@ connection.connect(err => {
     }
     console.log('Connected to the database!');
 });
+
+connection.query('SELECT * FROM tu_tabla', (err, resultados, campos) => {
+  if (err) {
+    console.error('Failed to execute query: ' + err.message);
+    return;
+  }
+  console.log('Results: ', resultados);
+});
+
+conexion.end();
