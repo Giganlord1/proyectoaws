@@ -20,3 +20,14 @@ connection.connect(err => {
     }
     console.log('Connected to the database!');
 });
+
+connection.query('SELECT * FROM tabla_de_prueba', (err, results) => {
+  if (err) {
+    console.error('Connection to Query failed: ' + err.message);
+    return;
+  }
+  console.log('Connected to Query! ', results);
+});
+
+
+connection.end();
